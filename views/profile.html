@@ -1,0 +1,23 @@
+:x
+<html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <head>
+    <title><%= username%></title>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+  </head>
+  <body>
+    <div class="container" style="padding-top: 20px; background-color: #777;">
+     <div class="jumotron">
+      <img src="<%= imgurl%>" style=" display: block; margin: auto; width: 60%;">
+      <a href="/" class="btn btn-lg btn-block btn-info" style="margin-top:20px;" > Return to Main Site</a> 
+      <form action="/site/<%= username%>/sendFR" method="post">
+        <button name="FR" class="btn btn-lg btn-block btn-warning"> Send Friend Request</a>
+      </form>
+      </div>
+      <h1><%= username%></h1>
+      <p style="padding-bottom: 30px;"><%= bio %></p>
+      <p> Friend List: </p>
+  </body>
+</html>

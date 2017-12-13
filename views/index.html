@@ -1,0 +1,41 @@
+<!doctype html>
+<html ng-app="myApp"> 
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+<head>
+    <title>User Login and Sessions</title>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/style.css" />
+</head>
+
+<body> 
+  <div class="container"> 
+    <div ng-controller="myController">
+        <h2 id="welcomeText">Welcome. You are Logged In as
+            <%= username %>
+        </h2>
+        <div>
+          <a class="btn btn-default" id="logoutLink" href="/logout">logout</a>
+          <a class="btn btn-default" id="editLink" href="/user">Edit User</a>
+        </div>
+        <p>See sites of fellow users:</p>
+        <div class="container" style="padding:60px; background-color:#aaa;" id="cardList"></div>
+    </div>
+    <script src="http://code.angularjs.org/1.2.9/angular.min.js"></script>
+    <script src="/javascripts/my_app.js"></script>
+  </div>
+</body>
+<script>
+  $.getJSON('/allusers', function(data){
+    console.log(data);
+    var cards = "";
+    for(var user in data){
+      info = data[user];
+      card = '<div class="col-sm-3"><div class="card"><div class="card-image"><img class="img-responsive" src=' + info.imgurl + '><span class="card-title">'+info.username +' </span></div><div class="card-content"><p>' + info.bio + '</p></div><div class="card-action"><a href="/site/' + info.username + '" target="new_blank">See site</a></div></div></div>'; 
+      cards += card;
+    }
+    $("#cardList").html(cards);
+   });
+</script>
+
+</html>

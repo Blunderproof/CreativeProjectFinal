@@ -1,0 +1,57 @@
+<!doctype html>
+<html ng-app="myApp">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+<head>
+    <title>User Login and Sessions</title>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/style.css" />
+</head>
+        
+<body> 
+  <div class="container" style="padding-top: 20px; background-color: #777;">
+    <div class="jumotron">
+      <img src="<%=imgurl%>" style=" display: block; margin: auto; width: 60%;">
+      <a href="/" class="btn btn-lg btn-block btn-info" style="margin-top:20px;" > Return to Main Site</a>
+      <% for (var FR in pendingFRs) { %>
+       <div>
+        <form action="/user/acceptFR/<%=pendingFRs[FR]%>" method="post">
+          <button type="submit"class="btn btn-lg btn-block btn-warning">"Accept request from: <%=pendingFRs[FR]%>"</button>
+        </form>
+        <form action="/user/rejectFR/<%=pendingFRs[FR]%>" method="post">
+          <button class="btn btn-lg btn-block btn-warning">Deny Request</button>
+        </form>
+       </div> <%}%>
+    <h1></h1>
+    <p style="padding-bottom: 30px;"><%=bio%></p>
+    <p> Friend List: </p>
+    <div class="form-container" ng-controller="myController">
+        <p id="sectionTitle" class="form-header">User Profile</p>
+        <form class="form-group" method="POST" action="/user/update">
+            <label>Username: </label>
+            <input placeholder="Username" type="text" id="username" name="username" ng-model="user.username" disabled><br>
+            <label>Email: </label>
+            <input placeholder="Email" type="email" id="email" name="email" ng-model="user.email"><br>          
+            <label>Color: </label>
+            <input placehold="Color" type="text" id="color" name="color" ng-model="user.color"><br>
+            <label>Bio: </label>
+            <input placeholder="Bio" type="text" id="bio" name="bio" ng-model="user.bio"><br>
+            <label>Image URL: </label>
+            <input placeholder="Image URL" type="text" id="imgurl" name="imgurl" ng-model="user.imgurl"><br>   
+            <input type="submit" id="save" value="Save">
+        </form>
+    </div>
+    <form method="POST" action="/user/delete">
+        <input type="submit" id="delete" value="Delete User">
+    </form>
+    <hr>
+    <div>FRs <%=pendingFRs%></div>
+    <span id="userMsg">
+    <%= msg %>
+    </span>
+    <script src="http://code.angularjs.org/1.2.9/angular.min.js"></script>
+    <script src="/javascripts/my_app.js"></script>
+    <a id="homeLink" href="/">Home</a>
+</body>
+
+
+</html>
