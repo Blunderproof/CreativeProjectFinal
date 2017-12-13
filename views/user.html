@@ -24,9 +24,11 @@
     <h1></h1>
     <p style="padding-bottom: 30px;"><%=bio%></p>
     <div> Friend List: 
-      <% for (var friend in friends) { %>
-       <div><%=friends[friend]%></div>
-      <%}%>
+      <ul>
+        <% for (var friend in friends) { %>
+         <li><%=friends[friend]%></li>
+        <%}%>
+      </ul>
     </div>
 
 

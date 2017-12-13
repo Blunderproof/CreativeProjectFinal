@@ -36,28 +36,29 @@ exports.acceptFR = function(req, res) {
     if(err){
       console.log("ERROR ACCEPTING FR");
       res.session.error = err;
-    } else {
-      req.session.friends = user.friends;
     }
   });
-  update = {$push: {'friends': frTo}};
-  User.findOneAndUpdate({ username: frFrom}, update, function(err, user){
+  var update2 = {$push: {'friends': frTo}};
+  User.findOneAndUpdate({ username: frFrom}, update2, function(err, user){
     if(err){
       console.log("ERROR ACCEPTING FR");
       res.session.error = err;
     }
   });  
-  update = {$pull: {'pendingFRs': frFrom}}; 
-  User.findOneAndUpdate({ _id: req.session.user}, update, function(err, user){
+  var update3 = {$pull: {'pendingFRs': frFrom}}; 
+  User.findOneAndUpdate({ _id: req.session.user}, update3, function(err, user){
     if(err){
       console.log("ERROR ACCEPTING FR");
       res.session.error = err;
-      res.redirect('/user');
-    } else {
-      req.session.pendingFRs = user.pendingFRs;
-      res.redirect('/user');
+      //res.redirect('/user');
     }
   });
+  User.findOne({_id:req.session.user})
+    .exec(function(err, user){
+      req.session.pendingFRs = user.pendingFRs;
+      req.session.friends = user.friends;
+      res.redirect('/user');
+    });
 }
 exports.rejectFR = function(req, res) {
   var frFrom = req.params.frFrom;
@@ -68,11 +69,13 @@ exports.rejectFR = function(req, res) {
       console.log("ERROR REJECTING FR");
       res.session.error = err;
       res.redirect('/user');
-    } else {
-      req.session.pendingFRs= user.pendingFRs;
-      res.redirect('/user');
     }
   });
+  User.findOne({_id: req.session.user})
+    .exec(function(err, user){
+      req.session.pendingFRs= user.pendingFRs;
+      res.redirect('/user');
+    });
 }
 
 exports.sendFR = function(req, res) {
@@ -100,7 +103,13 @@ exports.userSite = function(req, res) {
       if(!user){
         res.json(404, {err: "User not Found."});
       }else {
-        res.render('profile', {bio: user.bio, username: user.username, imgurl: user.imgurl});
+        res.render('profile', {
+                               color: user.color,
+                               pendingFRs: user.pendingFRs,
+                               bio: user.bio, 
+                               username: user.username,
+                               friends: user.friends,
+                               imgurl: user.imgurl});
       }
     });
   }

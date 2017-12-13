@@ -1,4 +1,4 @@
-:x
+
 <html>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
   <head>
@@ -19,6 +19,12 @@
       </div>
       <h1><%= username%></h1>
       <p style="padding-bottom: 30px;"><%= bio %></p>
-      <p> Friend List: </p>
+      <div> Friend List:
+        <ul>
+          <% for (var i=0; i<friends.length; i++) { %>
+           <li><%=friends[i]%></li>
+          <%}%>
+        </ul>
+      </div>
   </body>
 </html>
