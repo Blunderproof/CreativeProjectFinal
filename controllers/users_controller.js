@@ -23,6 +23,7 @@ exports.signup = function(req, res){
       req.session.user = user.id;
       req.session.username = user.username;
       req.session.msg = 'Authenticated as ' + user.username;
+      req.session.imgurl = "https://www.rover.com/blog/wp-content/uploads/2015/07/pug-sunglasses.jpg";
       res.redirect('/');
     }
   });
@@ -30,37 +31,47 @@ exports.signup = function(req, res){
 exports.acceptFR = function(req, res) {
   var frFrom = req.params.frFrom;
   var frTo = req.session.username;
-  User.findOne({ _id: req.session.user})
-   .exec(function(err, user){
-     user.pull({'pendingFRs': frFrom});
-     user.push({'friends': frFrom});
-     user.save(function(err){
-       if(err){
-         console.log("ERROR ACCEPTING FR");
-         res.session.error = err;
-       } else {
-         req.session.friends = user.friends;
-         req.session.pendingFRs = user.pendingFRs;
-       };
-       res.redirect('/user');
-     });
+  var update = {$push: {'friends': frFrom}};
+  User.findOneAndUpdate({ _id: req.session.user}, update, function(err, user){
+    if(err){
+      console.log("ERROR ACCEPTING FR");
+      res.session.error = err;
+    } else {
+      req.session.friends = user.friends;
+    }
+  });
+  update = {$push: {'friends': frTo}};
+  User.findOneAndUpdate({ username: frFrom}, update, function(err, user){
+    if(err){
+      console.log("ERROR ACCEPTING FR");
+      res.session.error = err;
+    }
+  });  
+  update = {$pull: {'pendingFRs': frFrom}}; 
+  User.findOneAndUpdate({ _id: req.session.user}, update, function(err, user){
+    if(err){
+      console.log("ERROR ACCEPTING FR");
+      res.session.error = err;
+      res.redirect('/user');
+    } else {
+      req.session.pendingFRs = user.pendingFRs;
+      res.redirect('/user');
+    }
   });
 }
 exports.rejectFR = function(req, res) {
   var frFrom = req.params.frFrom;
   var frTo = req.session.username;
-  User.findOne({_id: req.session.user})
-    .exec(function(err, user){
-      user.pull({'pendingFRs': frFrom});
-      user.save(function(err){
-        if(err){
-          req.session.error = err;
-          console.log("ERROR REMOVING FROM PENDINGFRs");
-        } else {
-         req.session.pendingFRs = user.pendingFRs;
-        };
+  var update = {$pull: {'pendingFRs': frFrom}};
+  User.findOneAndUpdate({_id: req.session.user}, update, function(err, user){
+    if(err){
+      console.log("ERROR REJECTING FR");
+      res.session.error = err;
       res.redirect('/user');
-    });
+    } else {
+      req.session.pendingFRs= user.pendingFRs;
+      res.redirect('/user');
+    }
   });
 }
 
