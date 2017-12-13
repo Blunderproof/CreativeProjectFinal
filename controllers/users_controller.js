@@ -27,6 +27,43 @@ exports.signup = function(req, res){
     }
   });
 };
+exports.acceptFR = function(req, res) {
+  var frFrom = req.params.frFrom;
+  var frTo = req.session.username;
+  User.findOne({ _id: req.session.user})
+   .exec(function(err, user){
+     user.pull({'pendingFRs': frFrom});
+     user.push({'friends': frFrom});
+     user.save(function(err){
+       if(err){
+         console.log("ERROR ACCEPTING FR");
+         res.session.error = err;
+       } else {
+         req.session.friends = user.friends;
+         req.session.pendingFRs = user.pendingFRs;
+       };
+       res.redirect('/user');
+     });
+  });
+}
+exports.rejectFR = function(req, res) {
+  var frFrom = req.params.frFrom;
+  var frTo = req.session.username;
+  User.findOne({_id: req.session.user})
+    .exec(function(err, user){
+      user.pull({'pendingFRs': frFrom});
+      user.save(function(err){
+        if(err){
+          req.session.error = err;
+          console.log("ERROR REMOVING FROM PENDINGFRs");
+        } else {
+         req.session.pendingFRs = user.pendingFRs;
+        };
+      res.redirect('/user');
+    });
+  });
+}
+
 exports.sendFR = function(req, res) {
   var frFrom = req.session.username;
   var frTo = req.params.username;
@@ -74,6 +111,7 @@ exports.login = function(req, res){
         req.session.bio = user.bio;
         req.session.imgurl = user.imgurl;
         req.session.pendingFRs = user.pendingFRs;
+        req.session.friends = user.friends;
         res.redirect('/');
       });
     }else{

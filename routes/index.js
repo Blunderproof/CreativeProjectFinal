@@ -6,7 +6,6 @@ var users = require('../controllers/users_controller');
 console.log("before / Route");
 router.get('/', function(req, res){
     console.log("/ Route");
-//    console.log(req);
     console.log(req.session);
     if (req.session.user) {
       console.log("/ Route if user");
@@ -16,7 +15,8 @@ router.get('/', function(req, res){
                            color:req.session.color,
                            imgurl:req.session.imgurl,
                            bio:req.session.bio,
-                           pendingFRs: req.session.pendingFRs});
+                           pendingFRs: req.session.pendingFRs,
+                           friends: req.session.friends});
     } else {
       console.log("/ Route else user");
       req.session.msg = 'Access denied!';
@@ -27,11 +27,15 @@ router.get('/site/:username', users.userSite);
 router.post('/site/:username/sendFR', users.sendFR);
 router.post('/user/acceptFR/:frFrom', users.acceptFR);
 router.post('/user/rejectFR/:frFrom', users.rejectFR);
-
 router.get('/user', function(req, res){
     console.log("/user Route");
     if (req.session.user) {
-      res.render('user', {pendingFRs: req.session.pendingFRs, username: req.session.username, imgurl: req.session.imgurl, bio: req.session.bio, msg:req.session.msg});
+      res.render('user', {friends: req.session.friends, 
+                          pendingFRs: req.session.pendingFRs,
+                          username: req.session.username,
+                          imgurl: req.session.imgurl,
+                          bio: req.session.bio,
+                          msg:req.session.msg});
     } else {
       req.session.msg = 'Access denied!';
       res.redirect('/login');

@@ -15,15 +15,22 @@
       <% for (var FR in pendingFRs) { %>
        <div>
         <form action="/user/acceptFR/<%=pendingFRs[FR]%>" method="post">
-          <button type="submit"class="btn btn-lg btn-block btn-warning">"Accept request from: <%=pendingFRs[FR]%>"</button>
+          <button type="submit"class="btn btn-lg btn-block btn-warning">Accept request from: <%=pendingFRs[FR]%></button>
         </form>
         <form action="/user/rejectFR/<%=pendingFRs[FR]%>" method="post">
-          <button class="btn btn-lg btn-block btn-warning">Deny Request</button>
+          <button class="btn btn-lg btn-block btn-danger">Deny Request</button>
         </form>
        </div> <%}%>
     <h1></h1>
     <p style="padding-bottom: 30px;"><%=bio%></p>
-    <p> Friend List: </p>
+    <div> Friend List: 
+      <% for (var friend in friends) { %>
+       <div><%=friends[friend]%></div>
+      <%}%>
+    </div>
+
+
+   </div>
     <div class="form-container" ng-controller="myController">
         <p id="sectionTitle" class="form-header">User Profile</p>
         <form class="form-group" method="POST" action="/user/update">
@@ -44,7 +51,6 @@
         <input type="submit" id="delete" value="Delete User">
     </form>
     <hr>
-    <div>FRs <%=pendingFRs%></div>
     <span id="userMsg">
     <%= msg %>
     </span>
