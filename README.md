@@ -1,4 +1,4 @@
-# CreativeProjectFinal
+# Bookface - Simple Facebook clone
 
 Simple facebook style clone site to demonstrate basic usage of APIs. Allows users to customize their page and send friend requests.
 
