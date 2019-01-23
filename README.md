@@ -1,7 +1,12 @@
 # CreativeProjectFinal
-Last Creative Projec,t CS 260
 
-Facebook style clone.
+Simple facebook style clone site to demonstrate basic usage of APIs. Allows users to customize their page and send friend requests.
 
-`npm install`
-`npm run`
+![Demo image](img/Demo.jpg)
+
+## Install instructions
+Run the following
+```
+npm install
+npm run
+```
